@@ -1,12 +1,69 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Astro Weight Calculator</title>
-  </head>
-  <body>
-     <!-- Write your markup here  -->
+<body>
+  <div class="container">
+    <h2>D.jones Astro  Calculator</h2>
+    <form>
+      <label for="weight-input">Weight on Earth (kg):</label>
+      <input type="number" id="weight-input" min="0" required>
+      <label for="planet-select">Select a Planet:</label>
+      <select id="planet-select">
+      </select>
+      <button type="button" id="calculate-button">Calculate</button>
+    </form>
+    <div id="result-message"></div>
+  </div>
 
-    <script src="main.js" charset="utf-8"></script>
-  </body>
-</html>
+  <script>
+    var planets = [
+      ['Pluto', 0.06],
+      ['Neptune', 1.148],
+      ['Uranus', 0.917],
+      ['Saturn', 1.139],
+      ['Jupiter', 2.640],
+      ['Mars', 0.3895],
+      ['Moon', 0.1655],
+      ['Earth', 1],
+      ['Venus', 0.9032],
+      ['Mercury', 0.377],
+      ['Sun', 27.9]
+    ];
+
+    function calculateWeight(weight, planetName) {
+      let result;
+
+      for (let i = 0; i < planets.length; i++) {
+        if (planets[i][0].toLowerCase() === planetName) {
+          result = weight * planets[i][1];
+          break;
+        }
+      }
+
+      return result;
+    }
+
+    function handleClickEvent(e) {
+      const userWeight = parseFloat(document.getElementById("weight-input").value);
+      const planetName = document.getElementById("planet-select").value.toLowerCase();
+
+      const result = calculateWeight(userWeight, planetName);
+
+      if (result !== undefined) {
+        const message = `If you were on ${planetName.charAt(0).toUpperCase() + planetName.slice(1)}, you would weigh ${result.toFixed(2)} kg.`;
+        document.getElementById("result-message").textContent = message;
+      } else {
+        const errorMessage = "Invalid planet name. Please enter a valid planet name.";
+        document.getElementById("result-message").textContent = errorMessage;
+      }
+    }
+
+    // Populating the dropdown with planet names
+    const planetSelect = document.getElementById("planet-select");
+    planets.forEach((planet) => {
+      const option = document.createElement("option");
+      option.value = planet[0].toLowerCase();
+      option.text = planet[0];
+      planetSelect.appendChild(option);
+    });
+
+    document.getElementById("calculate-button").onclick = handleClickEvent;
+  </script>
+</body>
